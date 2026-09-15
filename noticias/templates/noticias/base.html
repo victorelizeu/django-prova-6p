@@ -1,0 +1,28 @@
+{% load static %}
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'noticias/style.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="navegacao">
+            <img class="peixe" src="{% static 'noticias/fisches.png' %}">
+            <h1 class="h1-nav">Blog do Peixudo</h1>
+
+        </div>
+        <br>
+        <br>
+        <a href="{% url 'lista' %}">Início</a> <a href="{% url 'novo' %}">Nova Notícia</a>
+    </header>
+    <main>
+
+        {% block conteudo %}
+        {% endblock %}
+    </main>
+    <footer>© 2026</footer>
+</body>
+
+</html>

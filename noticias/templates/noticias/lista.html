@@ -1,0 +1,28 @@
+{% extends 'noticias/base.html' %}
+
+{% block conteudo %}
+<h2>Últimas Notícias</h2>
+<ul>
+    {% for post in posts %}
+    
+    <li>
+        Autor: {{ post.autor }}
+        <br>
+        <br>
+        <br>
+        {{ post.titulo }} - Status: {{ post.estados }}
+        <br>
+        <br>
+        <br>
+        Conteúdo: {{post.conteudo}}
+        <br>
+        <br>
+        <br>
+        Data: {{post.data}}
+    </li>
+    <br>
+    {% empty %}
+    <li>Nenhuma notícia publicada.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

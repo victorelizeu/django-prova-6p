@@ -1,0 +1,10 @@
+{% extends 'noticias/base.html' %}
+
+{% block conteudo %}
+<h2>Publicar Notícia</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar Notícia</button>
+</form>
+{% endblock %}
