@@ -4,7 +4,7 @@
 <h2>Últimas Notícias</h2>
 <ul>
     {% for post in posts %}
-    
+
     <li>
         Autor: {{ post.autor }}
         <br>
@@ -14,7 +14,15 @@
         <br>
         <br>
         <br>
-        Conteúdo: {{post.conteudo}}
+        Conteúdo: {{ post.conteudo }}
+        <br>
+        <br>
+        <br>
+        Categoria: {{ post.categoria }}
+        <br>
+        <br>
+        <br>
+        Tags: {{ post.tags }}
         <br>
         <br>
         <br>
