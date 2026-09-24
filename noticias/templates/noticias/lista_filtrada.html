@@ -1,0 +1,20 @@
+{% extends 'noticias/base.html' %}
+
+{% block conteudo %}
+    <h2>Resultados de pesquisa para: "{{ query }}"</h2>
+
+    <ul>
+        {% for l in lista %}
+        <li>
+            <strong>Autor:</strong> {{ l.autor }} <br>
+            <strong>Título:</strong> {{ l.titulo }} <br>
+            <strong>Categoria:</strong> {{ l.categoria }} <br>
+            <strong>Conteúdo:</strong> {{ l.conteudo }}
+            <strong>Status:</strong> {{ l.estados }}
+        </li>
+        <hr>
+        {% empty %}
+        <li>Nenhum post encontrado com o termo "{{ query }}".</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

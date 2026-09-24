@@ -20,6 +20,17 @@ services:
     
     volumes:
       - postgres_data:/var/lib/postgresql
+
+  
+  django:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      post:
+        condition: service_healthy
   
 volumes:
   postgres_data:

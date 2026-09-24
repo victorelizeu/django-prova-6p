@@ -11,11 +11,29 @@
         <div class="navegacao">
             <img class="peixe" src="{% static 'noticias/fisches.png' %}">
             <h1 class="h1-nav">Blog do Peixudo</h1>
-
         </div>
+
+        <div class="painel">
+            <a href="{% url 'lista' %}">Início</a> <a href="{% url 'novo' %}">Nova Notícia</a>
+        </div>
+
+        <form class="buscar" action="{% url 'lista' %}" method="get">
+            <input type="text" name="q" placeholder="Digite o título que deseja encontrar..."
+                value="{{ request.GET.q|default:'' }}">
+
+            <select name="categoria">
+                <option value="">Todas as Categorias</option>
+                {% for cat in categorias %}
+                <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"s" %}selected{% endif %}>
+                    {{ cat.nome }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Buscar</button>
+        </form>
         <br>
         <br>
-        <a href="{% url 'lista' %}">Início</a> <a href="{% url 'novo' %}">Nova Notícia</a>
     </header>
     <main>
 
