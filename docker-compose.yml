@@ -1,5 +1,6 @@
 services:
   post:
+  
     image: postgres:alpine
     
     container_name: post_do_jones
@@ -26,11 +27,15 @@ services:
 
   
   django:
+
     build: .
+
     env_file:
       - .env
+
     ports:
       - "8000:8000"
+
     depends_on:
       post:
         condition: service_healthy
