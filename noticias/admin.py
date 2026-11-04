@@ -1,10 +1,23 @@
 from django.contrib import admin
-from .models import Categoria, Comentario, Autor, Tag, Post
+from .models import Organizacao, Perfil, Categoria, Tag, Post, Comentario
 
-# Register your models here.
+
+@admin.register(Organizacao)
+class OrganizacaoAdmin(admin.ModelAdmin):
+    list_display = ("id", "nome")
+
+
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    list_display = ("id", "usuario", "organizacao", "papel")
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ("id", "titulo", "organizacao", "autor", "estados", "data")
+    list_filter = ("organizacao", "estados", "categoria")
+
 
 admin.site.register(Categoria)
-admin.site.register(Comentario)
-admin.site.register(Autor)
 admin.site.register(Tag)
-admin.site.register(Post)
+admin.site.register(Comentario)
