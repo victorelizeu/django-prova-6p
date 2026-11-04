@@ -11,9 +11,13 @@ class PostListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         return Post.objects.filter(organizacao=self.request.user.perfil.organizacao)
 
+    def perform_create(self, serializer):
+        serializer.save(
+            autor=self.request.user.perfil,
+            organizacao=self.request.user.perfil.organizacao,
+        )
 
-class PostDetail(
-    generics.RetrieveUpdateDestroyAPIView
-):
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
