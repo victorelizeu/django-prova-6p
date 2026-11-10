@@ -7,3 +7,10 @@ class Organizacao(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class DaOrganizacao(models.Model):
+    organizacao = models.ForeignKey("core.Organizacao", on_delete=models.PROTECT)
+
+    class Meta:
+        abstract = True
