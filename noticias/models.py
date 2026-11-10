@@ -1,47 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User
+from core.models import DaOrganizacao, Perfil
 
 
-class Organizacao(models.Model):
-    nome = models.CharField(max_length=120)
-    data_criacao = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self) -> str:
-        return self.nome
-
-
-class Perfil(models.Model):
-    PAPEIS = [
-        ("admin", "Administrador"),
-        ("operador", "Operador"),
-    ]
-
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    organizacao = models.ForeignKey(
-        Organizacao, on_delete=models.PROTECT, related_name="perfis"
-    )
-    papel = models.CharField(max_length=20, choices=PAPEIS, default="operador")
-    biografia = models.TextField(blank=True)
-
-    def __str__(self) -> str:
-        return f"{self.usuario.username} - {self.organizacao.nome} ({self.papel})"
-
-
-class Categoria(models.Model):
+class Categoria(DaOrganizacao):
     nome = models.CharField(max_length=100)
 
     def __str__(self) -> str:
         return self.nome
 
 
-class Tag(models.Model):
+class Tag(DaOrganizacao):
     nome = models.CharField(max_length=50)
 
     def __str__(self) -> str:
         return self.nome
 
 
-class Post(models.Model):
+class Post(DaOrganizacao):
     ESTADOS = [
         ("Rascunho", "Rascunho"),
         ("Em_Revisao", "Revisão Editorial"),
@@ -49,12 +24,7 @@ class Post(models.Model):
         ("Rejeitado", "Rejeitado!!"),
     ]
 
-    organizacao = models.ForeignKey(
-        Organizacao, on_delete=models.PROTECT, related_name="posts"
-    )
-
     autor = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name="posts")
-
     titulo = models.CharField(max_length=150)
     conteudo = models.TextField()
     data = models.DateTimeField(auto_now_add=True)
