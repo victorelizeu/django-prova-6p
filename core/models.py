@@ -14,3 +14,10 @@ class DaOrganizacao(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Perfil(models.Model):
+    PAPEIS = (
+        ("admin", "Administrador"),
+        ("operador", "Operador"),
+    )
