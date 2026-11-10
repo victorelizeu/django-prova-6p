@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Organizacao, Perfil
 
-# Register your models here.
+admin.site.register(Organizacao)
+admin.site.register(Perfil)
