@@ -1,15 +1,5 @@
 from django.contrib import admin
-from .models import Organizacao, Perfil, Categoria, Tag, Post, Comentario
-
-
-@admin.register(Organizacao)
-class OrganizacaoAdmin(admin.ModelAdmin):
-    list_display = ("id", "nome")
-
-
-@admin.register(Perfil)
-class PerfilAdmin(admin.ModelAdmin):
-    list_display = ("id", "usuario", "organizacao", "papel")
+from .models import Categoria, Tag, Post, Comentario
 
 
 @admin.register(Post)
