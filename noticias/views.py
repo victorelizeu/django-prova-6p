@@ -1,12 +1,17 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Post, Categoria
 from .forms import PostForm
-from django.db.models import Q
-
-# Create your views here.
 
 
+def org_atual(request):
+    return request.user.perfil.organizacao
+
+
+@login_required
 def lista_posts(request):
+    org = org_atual(request)
 
     filtros = Q()
 
@@ -19,9 +24,9 @@ def lista_posts(request):
     if categoria_id:
         filtros &= Q(categoria_id=categoria_id)
 
-    posts = Post.objects.filter(filtros)
+    posts = Post.objects.filter(organizacao=org).filter(filtros)
 
-    categorias = Categoria.objects.all()
+    categorias = Categoria.objects.filter(organizacao=org)
 
     conjunto = {
         "posts": posts,
@@ -31,14 +36,18 @@ def lista_posts(request):
     return render(request, "noticias/lista.html", conjunto)
 
 
+@login_required
 def novo_post(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
+    org = org_atual(request)
 
+    form = PostForm(request.POST or None, org=org)
+
+    if request.method == "POST":
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.organizacao = org
+            post.save()
+            form.save_m2m()
             return redirect("lista")
-    else:
-        form = PostForm()
 
     return render(request, "noticias/form.html", {"form": form})
