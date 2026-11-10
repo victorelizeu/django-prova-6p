@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class Organizacao(models.Model):
     nome = models.CharField(max_length=120)
+    data_criacao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.nome
