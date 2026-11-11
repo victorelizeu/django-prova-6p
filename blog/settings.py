@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "noticias",
-    "rest_framework"
+    "rest_framework",
+    "core"
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,6 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/'

@@ -1,26 +1,32 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, permissions
 from .models import Post
 from .serializers import PostSerializer
 
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return (
+            hasattr(request.user, 'perfil')
+            and getattr(request.user.perfil, 'papel', None) == 'admin'
+        )
+
+
 class PostListCreate(generics.ListCreateAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         return Post.objects.filter(organizacao=self.request.user.perfil.organizacao)
 
     def perform_create(self, serializer):
-        serializer.save(
-            autor=self.request.user.perfil,
-            organizacao=self.request.user.perfil.organizacao,
-        )
+        serializer.save(organizacao=self.request.user.perfil.organizacao)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
 
     def get_queryset(self):
         return Post.objects.filter(organizacao=self.request.user.perfil.organizacao)

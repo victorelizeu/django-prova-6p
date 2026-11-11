@@ -2,6 +2,6 @@
 
 2 - modificar para ficar organizado e otimizado(corrigido)
 
-3 - ajustar os dockerfiles/banco(Fiz hoje)
+3 - ajustar os dockerfiles/banco(corrigido)
 
-4 - o .env sem SECRET_KEY(corrigi hoje)
+4 - o .env sem SECRET_KEY(corrigido)
