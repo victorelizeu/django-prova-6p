@@ -3,9 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Post, Categoria
 from .forms import PostForm
+from django.core.exceptions import PermissionDenied
 
 
 def org_atual(request):
+    if not hasattr(request.user, 'perfil'):
+        raise PermissionDenied(
+            "Seu usuário não possui um Perfil vinculado a uma Organização.")
     return request.user.perfil.organizacao
 
 
@@ -33,11 +37,18 @@ def lista_posts(request):
     return render(request, "noticias/lista.html", conjunto)
 
 
+def eh_admin(user):
+    return hasattr(user, 'perfil') and user.perfil.papel == 'admin'
+
+
 @login_required
 def novo_post(request):
+    if not eh_admin(request.user):
+        raise PermissionDenied(
+            "Apenas administradores podem cadastrar notícias.")
+
     org = org_atual(request)
     form = PostForm(request.POST or None, org=org)
-
     if form.is_valid():
         post = form.save(commit=False)
         post.organizacao = org
