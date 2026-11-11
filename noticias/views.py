@@ -38,7 +38,7 @@ def lista_posts(request):
 
 
 def eh_admin(user):
-    return hasattr(user, 'perfil') and user.perfil.papel == 'admin'
+    return hasattr(user, 'perfil') and getattr(user.perfil, "papel", None) == 'admin'
 
 
 @login_required

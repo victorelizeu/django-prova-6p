@@ -4,10 +4,13 @@ from .serializers import PostSerializer
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return hasattr(request.user, 'perfil') and request.user.perfil.papel == 'admin'
+        return (
+            hasattr(request.user, 'perfil')
+            and getattr(request.user.perfil, 'papel', None) == 'admin'
+        )
 
 
 class PostListCreate(generics.ListCreateAPIView):
