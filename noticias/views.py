@@ -1,3 +1,7 @@
+import csv
+from .dashboard import calcular_metricas
+from .forms import PostForm, filtrar_periodo
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -45,7 +49,7 @@ def eh_admin(user):
 def novo_post(request):
     if not eh_admin(request.user):
         raise PermissionDenied(
-            "Apenas administradores podem cadastrar notícias.")
+            "Apenas administradores podem cadastrar notícias, não operadores.")
 
     org = org_atual(request)
     form = PostForm(request.POST or None, org=org)
@@ -57,3 +61,44 @@ def novo_post(request):
         return redirect("lista")
 
     return render(request, "noticias/form.html", {"form": form})
+
+
+@login_required
+def dashboard(request):
+    org = org_atual(request)
+    base = Post.objects.filter(organizacao=org)
+    base, form = filtrar_periodo(request, base)
+
+    contexto = calcular_metricas(base)
+    contexto["form"] = form
+    contexto["org"] = org
+    contexto["eh_admin"] = eh_admin(request.user)
+
+    return render(request, "noticias/dashboard.html", contexto)
+
+
+@login_required
+def exportar_posts_csv(request):
+    if not eh_admin(request.user):
+        raise PermissionDenied(
+            "Apenas administradores podem exportar relatórios.")
+
+    org = org_atual(request)
+    qs = Post.objects.filter(organizacao=org).select_related(
+        "autor__usuario", "categoria")
+    qs, _ = filtrar_periodo(request, qs)
+
+    resp = HttpResponse(content_type="text/csv; charset=utf-8")
+    resp["Content-Disposition"] = 'attachment; filename="relatorio_posts.csv"'
+
+    writer = csv.writer(resp)
+    writer.writerow(["Título", "Autor", "Categoria", "Estado", "Data"])
+    for p in qs:
+        writer.writerow([
+            p.titulo,
+            p.autor.usuario.username,
+            p.categoria.nome if p.categoria else "Sem categoria, coloque uma categoria",
+            p.get_estados_display(),
+            p.data.strftime("%d/%m/%Y %H:%M"),
+        ])
+    return resp
