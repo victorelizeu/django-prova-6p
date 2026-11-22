@@ -26,7 +26,7 @@
             <select name="categoria">
                 <option value="">Todas as Categorias</option>
                 {% for cat in categorias %}
-                <option value="{{ cat.id }}" {% if request.GET.categoria==cat.id|stringformat:"s" %}selected{% endif %}>
+                <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"s" %}selected{% endif %}>
                     {{ cat.nome }}
                 </option>
                 {% endfor %}
