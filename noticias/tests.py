@@ -4,7 +4,6 @@ from django.urls import reverse
 from core.models import Organizacao, Perfil
 from .models import Post, Comentario
 
-
 class DashboardTest(TestCase):
     def setUp(self):
         org_a = Organizacao.objects.create(nome="Org A")
