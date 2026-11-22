@@ -1,0 +1,85 @@
+{% extends "noticias/base.html" %}
+
+{% block conteudo %}
+<h2>Dashboard — {{ org.nome }}</h2>
+
+<form method="get">
+    Início: {{ form.inicio }}
+    Fim: {{ form.fim }}
+    <button type="submit">Filtrar</button>
+    <a href="{% url 'dashboard' %}">Limpar</a>
+    {% if eh_admin %}
+    | <a
+        href="{% url 'exportar_csv' %}?inicio={{ request.GET.inicio|default:'' }}&fim={{ request.GET.fim|default:'' }}">Exportar
+        CSV</a>
+    {% endif %}
+</form>
+
+<br>
+
+<div>
+    <p>Total de Posts: <strong>{{ kpis.total_posts }}</strong></p>
+    <p>Publicados: <strong>{{ kpis.publicados }}</strong></p>
+    <p>Em Revisão: <strong>{{ kpis.em_revisao }}</strong></p>
+    <p>Total de Comentários: <strong>{{ kpis.total_comentarios }}</strong></p>
+</div>
+
+<br>
+
+{% if eh_admin %}
+<h3>Posts por Mês</h3>
+<canvas id="grafMes" width="400" height="150"></canvas>
+{% endif %}
+
+<h3>Top 5 Autores</h3>
+<table border="1">
+    <tr>
+        <th>Autor</th>
+        <th>Posts</th>
+    </tr>
+    {% for item in ranking_autores %}
+    <tr>
+        <td>{{ item.autor__usuario__username }}</td>
+        <td>{{ item.total }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">Sem dados no período.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Posts por Categoria</h3>
+<table border="1">
+    <tr>
+        <th>Categoria</th>
+        <th>Posts</th>
+    </tr>
+    {% for item in por_categoria %}
+    <tr>
+        <td>{{ item.categoria__nome|default:"Sem categoria" }}</td>
+        <td>{{ item.total }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">Sem dados no período.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{{ por_mes|json_script:"dados-mes" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const d = JSON.parse(document.getElementById("dados-mes").textContent);
+    const c = document.getElementById("grafMes");
+    if (c && d.length) {
+        new Chart(c, {
+            type: "bar",
+            data: {
+                labels: d.map(x => x.mes),
+                datasets: [{ label: "Posts", data: d.map(x => x.total) }]
+            }
+        });
+    }
+</script>
+{% endblock %}
