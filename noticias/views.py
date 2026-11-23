@@ -8,6 +8,7 @@ from django.db.models import Q
 from .models import Post, Categoria
 from .forms import PostForm
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
 
 
 def org_atual(request):
@@ -99,6 +100,6 @@ def exportar_posts_csv(request):
             p.autor.usuario.username,
             p.categoria.nome if p.categoria else "Sem categoria, coloque uma categoria",
             p.get_estados_display(),
-            p.data.strftime("%d/%m/%Y %H:%M"),
+            timezone.localtime(p.data).strftime("%d/%m/%Y %H:%M"),
         ])
     return resp
