@@ -1,14 +1,14 @@
 # O QUE É?
 
-Esse projeto é desenvolvido em Django com rest_framework para demonstrar como é um blog de notícias online.
+Esse projeto é desenvolvido em Django com rest_framework e PostgreSQL para demonstrar como funciona um blog de notícias multi-organização com painel administrativo e dashboard de métricas.
 
 # Passos Importantes
 
-Obs: Primeiro de tudo crie uma venv e acesse-a se não tiver uma, para que o install fique apenas no ambiente virtual e não na própria máquina! E todos os comandos que precisar utilizar do django são feitos pelo docker com docker compose django... pois é inteiramente rodando por container.
+Obs: Caso rode algo fora do container, crie uma venv e acesse-a primeiro para que as instalações fiquem apenas no ambiente virtual e não na própria máquina. Porém, como o projeto roda inteiramente via container, todos os comandos do Django são feitos pelo Docker (ex: `docker compose exec web python manage.py ...`).
 
-1 - Instalar os requerimentos do arquivo requirements.txt, para facilitar utilize o comando "pip install -r requirements.txt".
-2 - Coloque as informações do seu banco de dados no arquivo .env.EXAMPLE e depois apague EXAMPLE, o docker compose já irá utilizar as variavéis de ambiente que estão lá e o settings.py do projeto também, então é só subir para o docker. (Já tem a configuração pronta, só mudar esses dados)
-3 - faça as migrações do banco de dados e então migre.
-4 - Agora o site poderá rodar com o banco PostgreSQL.
+1 - Suba os containers com o Docker Compose (ele já instala automaticamente as dependências do arquivo `requirements.txt`, ou utilize `pip install -r requirements.txt` caso esteja na venv local).
+2 - Coloque as informações do seu banco de dados no arquivo `.env.EXAMPLE` e depois renomeie para `.env` (apagando o `.EXAMPLE`). O Docker Compose e o `settings.py` já estão configurados para ler essas variáveis de ambiente automaticamente.
+3 - Faça as migrações do banco de dados (`makemigrations` e `migrate`) e crie um superusuário (`createsuperuser`) pelo container.
+4 - Acesse `/admin/`, crie uma Organização e vincule um Perfil ao seu usuário (com papel `admin` ou `operador`) para liberar o acesso ao site e ao dashboard.
 
-Alguns comandos serão necessários que sejam feitos pelo docker compose pois estão dentro do container.
+Alguns comandos serão necessários que sejam feitos pelo `docker compose` pois a aplicação e o banco PostgreSQL estão dentro dos containers.

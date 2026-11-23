@@ -14,7 +14,9 @@
         </div>
 
         <div class="painel">
-            <a href="{% url 'lista' %}">Início</a> <a href="{% url 'novo' %}">Nova Notícia</a>
+            <a href="{% url 'lista' %}">Início</a>
+            <a href="{% url 'novo' %}">Nova Notícia</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
         </div>
 
         <form class="buscar" action="{% url 'lista' %}" method="get">

@@ -25,3 +25,24 @@ class PostForm(forms.ModelForm):
                 f"O conteúdo da notícia deve ter no mínimo 50 caracteres. O texto atual tem apenas {len(conteudo)}."
             )
         return conteudo
+
+
+class PeriodoForm(forms.Form):
+    inicio = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date"})
+    )
+    fim = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date"})
+    )
+
+
+def filtrar_periodo(request, qs):
+    form = PeriodoForm(request.GET)
+    if form.is_valid():
+        if form.cleaned_data["inicio"]:
+            qs = qs.filter(data__date__gte=form.cleaned_data["inicio"])
+        if form.cleaned_data["fim"]:
+            qs = qs.filter(data__date__lte=form.cleaned_data["fim"])
+    return qs, form
