@@ -6,7 +6,7 @@ def calcular_metricas(base_qs):
     kpis = base_qs.annotate(
         qtd_comentarios=Count("comentarios")
     ).aggregate(
-        totalposts=Count("id"),
+        total_posts=Count("id"),
         publicados=Count("id", filter=Q(estados="Publicado")),
         em_revisao=Count("id", filter=Q(estados="Em_Revisao")),
         total_comentarios=Sum("qtd_comentarios"),

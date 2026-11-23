@@ -93,7 +93,7 @@ def exportar_posts_csv(request):
     resp["Content-Disposition"] = 'attachment; filename="relatorio_posts.csv"'
 
     writer = csv.writer(resp)
-    writer.writerow(["Título", "Autor", "Categoria", "Estado", "Data"])
+    writer.writerow(["Titulo", "Autor", "Categoria", "Estado", "Data"])
     for p in qs:
         writer.writerow([
             p.titulo,
